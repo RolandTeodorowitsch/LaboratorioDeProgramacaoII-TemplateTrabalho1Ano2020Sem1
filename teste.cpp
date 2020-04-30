@@ -126,6 +126,7 @@ int testaEmpresa() {
     end2.defineCidade("Porto Alegre");
     end2.defineUF("RS");
     end2.defineCEP("90123-456");
+    Endereco end3 = end2;
     
     Telefone tel1;
     tel1.defineDDI(1);
@@ -135,6 +136,7 @@ int testaEmpresa() {
     tel2.defineDDI(55);
     tel2.defineDDD(51);
     tel2.defineNumero(34215678);
+    Telefone tel3 = tel2;
     
     Empresa emp;
     emp.defineNome("Supermercado Boa ");
@@ -163,7 +165,21 @@ int testaEmpresa() {
 
     if (emp.toCSV() != csv)
         return 0;
-	return 1;
+
+    Empresa emp3;
+    emp3.defineNome("Supermercado Boa Praça");
+    emp3.defineCNPJ("40160083000109");
+    emp3.defineInscEst("1020306789");
+    emp3.defineEndereco(&end3);
+    emp3.defineTelefone(&tel3);
+
+	if	(!(emp == emp3))
+		return 0;
+    emp3.defineInscEst("1020306788");
+	if	(emp == emp3)
+		return 0;
+
+    return 1;
 }
 #endif
 
