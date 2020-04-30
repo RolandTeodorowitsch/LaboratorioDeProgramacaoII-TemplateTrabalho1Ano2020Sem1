@@ -1,35 +1,16 @@
 // testa_trabalho.cpp (Roland Teodorowitsch; 29 abr. 2020)
 
-#define CNPJ_OK
-//#define ENDERECO_OK
-//#define TELEFONE_OK
-//#define EMPRESA_OK
-//#define PRODUTO_OK
-//#define PRODUTOS_OK
-
 #include <iostream>
-#ifdef CNPJ_OK
 #include "Cnpj.hpp"
-#endif
-#ifdef ENDERECO_OK
-#include "Endereco.hpp"
-#endif
-#ifdef TELEFONE_OK
-#include "Telefone.hpp"
-#endif
-#ifdef EMPRESA_OK
-#include "Empresa.hpp"
-#endif
-#ifdef PRODUTO_OK
-#include "Produto.hpp"
-#endif
-#ifdef PRODUTOS_OK
-#include "Produtos.hpp"
-#endif
+//#include "Endereco.hpp"
+//#include "Telefone.hpp"
+//#include "Empresa.hpp"
+//#include "Produto.hpp"
+//#include "Produtos.hpp"
 
 using namespace std;
 
-#ifdef CNPJ_OK
+#ifdef _CNPJ_HPP
 int testaCnpj() {
 	// Teste para a classe Cnpj (return 0 significa que o teste falhou)s
 	string s1 = "40.160.083/0001-09"; // CNPJ Valido
@@ -65,7 +46,7 @@ int testaCnpj() {
 }
 #endif
 
-#ifdef ENDERECO_OK
+#ifdef _ENDERECO_HPP
 int testaEndereco() {
     // Não testa toString(), pois o formato de saída não é rigoroso neste caso
     string csv="Rua da Esperança;1234;s/c;Jardim Velho;Porto Alegre;RS;90123-456";
@@ -104,7 +85,7 @@ int testaEndereco() {
 }
 #endif
 
-#ifdef TELEFONE_OK
+#ifdef _TELEFONE_HPP
 int testaTelefone() {
     Telefone t1;
     t1.defineDDI(55);
@@ -124,41 +105,97 @@ int testaTelefone() {
 }
 #endif
 
-#ifdef EMPRESA_OK
+#ifdef _EMPRESA_HPP
 int testaEmpresa() {
+    // Não testa toString(), pois o formato de saída não é rigoroso neste caso
+    string csv="Supermercado Boa Praça;40.160.083/0001-09;1020306789;Rua da Esperança;1234;;Jardim Velho;Porto Alegre;RS;90123-456;55;51;34215678";
+    
+    Endereco end1;
+    end1.defineLogradouro("1");
+    end1.defineNumero("2");
+    end1.defineComplemento("3");
+    end1.defineBairro("4");
+    end1.defineCidade("5");
+    end1.defineUF("6");
+    end1.defineCEP("7");
+    Endereco end2;
+    end2.defineLogradouro("Rua da Esperança");
+    end2.defineNumero("1234");
+    end2.defineComplemento("");
+    end2.defineBairro("Jardim Velho");
+    end2.defineCidade("Porto Alegre");
+    end2.defineUF("RS");
+    end2.defineCEP("90123-456");
+    
+    Telefone tel1;
+    tel1.defineDDI(1);
+    tel1.defineDDD(2);
+    tel1.defineNumero(3);
+    Telefone tel2;
+    tel2.defineDDI(55);
+    tel2.defineDDD(51);
+    tel2.defineNumero(34215678);
+    
+    Empresa emp;
+    emp.defineNome("Supermercado Boa ");
+    emp.defineCNPJ("15305817000145");
+    emp.defineInscEst("102030");
+    emp.defineEndereco(&end1);
+    emp.defineTelefone(&tel1);
+
+    string s;
+    s = emp.obtemNome();
+    emp.defineNome(s+"Praça");
+    s = emp.obtemCNPJ();
+    if (s != "15.305.817/0001-45")
+        return 0;
+    emp.defineCNPJ("40.160.083/0001-09");
+    s = emp.obtemInscEst();
+    emp.defineInscEst(s+"6789");
+    Endereco *pEnd = emp.obtemEndereco();
+    if (pEnd->toCSV() != "1;2;3;4;5;6;7")
+        return 0;
+    emp.defineEndereco(&end2);
+    Telefone *pTel = emp.obtemTelefone();
+    if (pTel->toCSV() != "1;2;3")
+        return 0;
+    emp.defineTelefone(&tel2);
+
+    if (emp.toCSV() != csv)
+        return 0;
 	return 1;
 }
 #endif
 
-#ifdef PRODUTO_OK
+#ifdef _PRODUTO_HPP
 int testaProduto() {
 	return 1;
 }
 #endif
     
-#ifdef PRODUTOS_OK
+#ifdef _PRODUTOS_HPP
 int testaProdutos() {
 	return 1;
 }
 #endif
 
 int main() {
-#ifdef CNPJ_OK
+#ifdef _CNPJ_HPP
 	cout << "Cnpj:\t\t\t" << (testaCnpj()?"OK":"FALHOU") << endl;
 #endif    
-#ifdef ENDERECO_OK
+#ifdef _ENDERECO_HPP
 	cout << "Endereco:\t\t" << (testaEndereco()?"OK":"FALHOU") << endl;
 #endif    
-#ifdef TELEFONE_OK
+#ifdef _TELEFONE_HPP
 	cout << "Telefone:\t\t" << (testaTelefone()?"OK":"FALHOU") << endl;
 #endif    
-#ifdef EMPRESA_OK
+#ifdef _EMPRESA_HPP
 	cout << "Empresa:\t\t" << (testaEmpresa()?"OK":"FALHOU") << endl;
 #endif    
-#ifdef PRODUTO_OK
+#ifdef _PRODUTO_HPP
 	cout << "Produto:\t\t" << (testaProduto()?"OK":"FALHOU") << endl;
 #endif    
-#ifdef PRODUTOS_OK
+#ifdef _PRODUTOS_HPP
 	cout << "Produtos:\t\t" << (testaProdutos()?"OK":"FALHOU") << endl;
 #endif    
 	return 0;
