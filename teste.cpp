@@ -185,6 +185,45 @@ int testaEmpresa() {
 
 #ifdef _PRODUTO_HPP
 int testaProduto() {
+    string csv1="7896324274608;Biscoito Mosmann Maria Tradicional 400g;unidade;kg;0.4;4.29";
+    Produto p1("7896324274608","Biscoito Mosmann Maria Tradicional 400g",1,"kg", 0.4, 4.29);
+    if ( p1.toCSV() != csv1 )
+        return 0;
+    Produto p2;
+    string csv2 = "7898912020178;Cerveja Dadobier Lager Leve Lata 350ml;unidade;litro;0.35;2.19";
+    if (!p2.fromCSV(csv2))
+        return 0;
+    if ( p2.toCSV() != csv2 )
+        return 0;
+    string csv3 = "7891095100552;Lentilha Yoki 500g;unidade;kg;0.5;4.99";
+    Produto p3("7891095100","Lentilha Yoki",0,"k",0.1,3.99);
+    string s = p3.obtemCodBarras();
+    p3.defineCodBarras(s+"552");
+    s = p3.obtemDescricao();
+    p3.defineDescricao(s+" 500g");
+    int u = p3.obtemGranelOuUnidade();
+    p3.defineGranelOuUnidade(u+1);
+    s = p3.obtemMedida();
+    p3.defineMedida(s+"g");
+    double v = p3.obtemQuantidade();
+    p3.defineQuantidade(v+0.4);
+    v = p3.obtemPreco();
+    p3.definePreco(v+1.0);
+    if ( p3.toCSV() != csv3 )
+        return 0;
+    
+    Produto p4 = p3;
+	if	(!(p4 == p3))
+		return 0;
+    p4.definePreco(4.999);
+	if	(p4 == p3)
+		return 0;
+
+    if ( !(p1 < p2) )
+        return 0;
+    if ( p2 < p1 )
+        return 0;
+    
 	return 1;
 }
 #endif
